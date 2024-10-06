@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Skibidi Toilet Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .quiz-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 800px;
+            width: 90%;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        h1 {
+            font-family: 'Bangers', cursive;
+            color: #4a4a4a;
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .question {
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .question:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .option {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1em;
+        }
+        .option:hover {
+            background-color: #45a049;
+        }
+        .option.selected {
+            background-color: #2196F3;
+        }
+        .option.correct {
+            background-color: #4CAF50;
+        }
+        .option.incorrect {
+            background-color: #f44336;
+        }
+        #result {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #next, #submit {
+            display: block;
+            width: 100%;
+            background-color: #4a4a4a;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+        #next:hover, #submit:hover {
+            background-color: #333;
+        }
+        #next:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        #progress {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Ultimate Skibidi Toilet Quiz</h1>
+        <div id="progress"></div>
+        <div id="quiz"></div>
+        <button id="next" disabled>Next Question</button>
+        <button id="submit" style="display:none;">Finish Quiz</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "Who created the Skibidi Toilet series?",
+                options: ["DaFuq!?Boom!", "PewDiePie", "MrBeast", "Kurzgesagt"],
+                correct: 0
+            },
+            {
+                question: "What is the main character type in Skibidi Toilet?",
+                options: ["Talking cars", "Flying pizzas", "Toilets with human heads", "Dancing bananas"],
+                correct: 2
+            },
+            {
+                question: "In which year did Skibidi Toilet gain massive popularity?",
+                options: ["2020", "2021", "2022", "2023"],
+                correct: 3
+            },
+            {
+                question: "What is the real name of the creator of Skibidi Toilet?",
+                options: ["Alexander Pushkin", "Alexander Tatarsky", "Alexander the Great", "Alexander Graham Bell"],
+                correct: 1
+            },
+            {
+                question: "Which platform contributed significantly to Skibidi Toilet's viral spread?",
+                options: ["LinkedIn", "TikTok", "Myspace", "Friendster"],
+                correct: 1
+            },
+            {
+                question: "What genre best describes Skibidi Toilet?",
+                options: ["Romance", "Horror", "Surreal comedy", "Documentary"],
+                correct: 2
+            },
+            {
+                question: "What is a common activity of the toilet characters?",
+                options: ["Reading books", "Playing chess", "Fighting camera-headed creatures", "Cooking gourmet meals"],
+                correct: 2
+            },
+            {
+                question: "What is the primary language of the original Skibidi Toilet creator?",
+                options: ["English", "Japanese", "Russian", "French"],
+                correct: 2
+            },
+            {
+                question: "What type of animation is used in Skibidi Toilet?",
+                options: ["Traditional hand-drawn", "Stop motion", "3D computer animation", "Rotoscoping"],
+                correct: 2
+            },
+            {
+                question: "What is a recurring sound in Skibidi Toilet videos?",
+                options: ["Meow", "Skibidi", "Woof", "Bazinga"],
+                correct: 1
+            },
+            {
+                question: "What color are most of the toilet characters?",
+                options: ["Green", "Blue", "White", "Red"],
+                correct: 2
+            },
+            {
+                question: "What do the camera-headed characters often do?",
+                options: ["Take photos", "Dance", "Fight the toilet characters", "Cook"],
+                correct: 2
+            },
+            {
+                question: "What is a common criticism of Skibidi Toilet?",
+                options: ["Too educational", "Too expensive", "Too weird for young audiences", "Too long"],
+                correct: 2
+            },
+            {
+                question: "What type of music often accompanies Skibidi Toilet videos?",
+                options: ["Classical", "Jazz", "Electronic/Techno", "Country"],
+                correct: 2
+            },
+            {
+                question: "What is a common setting in Skibidi Toilet episodes?",
+                options: ["Beaches", "Mountains", "Urban environments", "Forests"],
+                correct: 2
+            },
+            {
+                question: "What do fans often create related to Skibidi Toilet?",
+                options: ["Scientific papers", "Memes and fan animations", "Cookbooks", "Political manifestos"],
+                correct: 1
+            },
+            {
+                question: "What is the typical length of a Skibidi Toilet episode?",
+                options: ["2 hours", "30 minutes", "1-3 minutes", "45 minutes"],
+                correct: 2
+            },
+            {
+                question: "What generation is particularly fond of Skibidi Toilet?",
+                options: ["Baby Boomers", "Gen X", "Millennials", "Gen Z"],
+                correct: 3
+            },
+            {
+                question: "What is a common reaction from first-time viewers of Skibidi Toilet?",
+                options: ["Boredom", "Confusion", "Anger", "Sadness"],
+                correct: 1
+            },
+            {
+                question: "What is the primary goal of the toilet characters in most episodes?",
+                options: ["Find true love", "Survive and fight enemies", "Solve math problems", "Build skyscrapers"],
+                correct: 1
+            }
+        ];
+
+        const quizContainer = document.getElementById('quiz');
+        const resultContainer = document.getElementById('result');
+        const submitButton = document.getElementById('submit');
+        const nextButton = document.getElementById('next');
+        const progressDiv = document.getElementById('progress');
+
+        let currentQuestion = 0;
+        let score = 0;
+        let incorrectAnswers = [];
+
+        function showQuestion(questionIndex) {
+            const questionData = quizData[questionIndex];
+            const questionElement = document.createElement('div');
+            questionElement.className = 'question';
+            questionElement.innerHTML = `
+                <p>${questionIndex + 1}. ${questionData.question}</p>
+                <div class="options">
+                    ${questionData.options.map((option, index) => `
+                        <button class="option" data-index="${index}">${option}</button>
+                    `).join('')}
+                </div>
+            `;
+            quizContainer.innerHTML = '';
+            quizContainer.appendChild(questionElement);
+            progressDiv.textContent = `Question ${questionIndex + 1} of ${quizData.length}`;
+            nextButton.disabled = true;
+        }
+
+        function checkAnswer() {
+            const selectedOption = quizContainer.querySelector('.option.selected');
+            if (selectedOption) {
+                const answer = parseInt(selectedOption.getAttribute('data-index'));
+                if (answer === quizData[currentQuestion].correct) {
+                    score++;
+                } else {
+                    incorrectAnswers.push({
+                        question: quizData[currentQuestion].question,
+                        incorrectAnswer: quizData[currentQuestion].options[answer],
+                        correctAnswer: quizData[currentQuestion].options[quizData[currentQuestion].correct]
+                    });
+                }
+                currentQuestion++;
+                if (currentQuestion < quizData.length) {
+                    showQuestion(currentQuestion);
+                } else {
+                    showResults();
+                }
+            }
+        }
+
+        function showResults() {
+            quizContainer.innerHTML = `
+                <h2>Quiz Completed</h2>
+                <p>You scored ${score} out of ${quizData.length}!</p>
+                <h3>Questions:</h3>
+            `;
+
+            quizData.forEach((questionData, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question';
+                const incorrectAnswer = incorrectAnswers.find(item => item.question === questionData.question);
+                const isCorrect = !incorrectAnswer;
+                questionElement.innerHTML = `
+                    <p>${index + 1}. ${questionData.question}</p>
+                    <p style="color: ${isCorrect ? 'green' : 'red'}">Your answer: ${isCorrect ? questionData.options[questionData.correct] : incorrectAnswer.incorrectAnswer}</p>
+                    ${!isCorrect ? `<p style="color: green">Correct answer: ${incorrectAnswer.correctAnswer}</p>` : ''}
+                `;
+                quizContainer.appendChild(questionElement);
+            });
+
+            nextButton.style.display = 'none';
+            submitButton.style.display = 'none';
+            progressDiv.style.display = 'none';
+        }
+
+        showQuestion(currentQuestion);
+
+        quizContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('option')) {
+                const options = quizContainer.querySelectorAll('.option');
+                options.forEach(option => option.classList.remove('selected'));
+                e.target.classList.add('selected');
+                nextButton.disabled = false;
+            }
+        });
+
+        nextButton.addEventListener('click', function() {
+            if (currentQuestion === quizData.length - 1) {
+                nextButton.style.display = 'none';
+                submitButton.style.display = 'block';
+            } else {
+                checkAnswer();
+            }
+        });
+
+        submitButton.addEventListener('click', function() {
+            if (quizContainer.querySelector('.option.selected')) {
+                checkAnswer();
+            } else {
+                alert('Please select an answer before finishing the quiz.');
+            }
+        });
+    </script>
+</body>
+</html>
